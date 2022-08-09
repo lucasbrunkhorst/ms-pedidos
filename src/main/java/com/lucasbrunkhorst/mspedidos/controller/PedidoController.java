@@ -4,6 +4,7 @@ import com.lucasbrunkhorst.mspedidos.dto.PedidoDto;
 import com.lucasbrunkhorst.mspedidos.dto.StatusDto;
 import com.lucasbrunkhorst.mspedidos.service.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -32,6 +33,11 @@ public class PedidoController {
         return  ResponseEntity.ok(dto);
     }
 
+    @GetMapping("/porta")
+    public String retornaPorta(@Value("${local.server.port}") String porta){
+        return String.format("Requisição respondida pela instância executando na porta %s", porta);
+    }
+
     @PostMapping()
     public ResponseEntity<PedidoDto> realizaPedido(@RequestBody @Valid PedidoDto dto, UriComponentsBuilder uriBuilder) {
         PedidoDto pedidoRealizado = service.criarPedido(dto);
@@ -40,6 +46,11 @@ public class PedidoController {
 
         return ResponseEntity.created(endereco).body(pedidoRealizado);
 
+    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<PedidoDto> remover(@PathVariable @NotNull Long id) {
+        service.excluirPedido(id);
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}/status")

@@ -52,6 +52,9 @@ public class PedidoService {
 
         return modelMapper.map(pedido, PedidoDto.class);
     }
+    public void excluirPedido(Long id) {
+        repository.deleteById(id);
+    }
 
     public PedidoDto atualizaStatus(Long id, StatusDto dto) {
 
